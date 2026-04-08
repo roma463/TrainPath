@@ -1,6 +1,7 @@
+using _Train.Scripts.Root;
 using UnityEngine;
 
-public abstract class StateMachine<T> : MonoBehaviour where T : Context
+public abstract class StateMachine<T> : MonoBehaviour, IFixedUpdater where T : Context
 {
     [field: SerializeField] public T Context { get; private set; }
 
@@ -26,13 +27,7 @@ public abstract class StateMachine<T> : MonoBehaviour where T : Context
         if (_isInitializeble)
             ExecuteState();
     }
-
-    private void FixedUpdate()
-    {
-        if (_isInitializeble)
-            FixedExecuteState();
-    }
-
+    
     public void FixedExecuteState()
     {
         _currentState.FixedExecute();
@@ -46,5 +41,11 @@ public abstract class StateMachine<T> : MonoBehaviour where T : Context
     private void OnDestroy()
     {
         _currentState?.OnExitState();
+    }
+
+    public void FUpdate()
+    {
+        if (_isInitializeble)
+            FixedExecuteState();
     }
 }

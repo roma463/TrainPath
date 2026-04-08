@@ -1,10 +1,11 @@
 using System;
+using _Train.Scripts.Root;
 using TMPro;
 using UnityEngine;
 
 namespace _Train.Scripts.Train
 {
-    public class TrainMotion : MonoBehaviour, IMovableObject
+    public class TrainMotion : MonoBehaviour, IMovableObject, IFixedUpdater
     {
         [SerializeField] private Rails.Rails rails;
         [SerializeField] private float acceleration = 8f;
@@ -19,11 +20,10 @@ namespace _Train.Scripts.Train
         [Header("Debug")]
         [SerializeField] private TMP_Text viewSpeed;
         
-    
         private Quaternion previousRotation;
         private float _currentSpeed;
         
-        public Vector3 LinearVelocity => trainRb.linearVelocity;
+        public Vector3 LinearVelocity => _leniarVeloty;
         public Vector3 AngularVelocity
         {
             get
@@ -32,8 +32,13 @@ namespace _Train.Scripts.Train
             }
         }
 
+        private Vector3 _leniarVeloty;
+        private Vector3 _lastPosition;
+
         private void Awake()
         {
+            _lastPosition = trainRb.transform.position;
+            
             trainRb = GetComponent<Rigidbody>();
             trainRb.interpolation = RigidbodyInterpolation.Interpolate;
             var startPosition = rails.GetStartPosition();
@@ -49,21 +54,23 @@ namespace _Train.Scripts.Train
         
         private void FixedUpdate()
         {
-            UpdateSpeed();
-            MoveTrain();
-            UpdateDebug();
+
         }
 
         private void UpdateDebug()
         {
             viewSpeed.text = $"current speed: <color=yellow>{(float)Math.Round(_currentSpeed, 1)}</color>";
+            // Debug.Log("Train FixedUpdate");
         }
         
         private void MoveTrain()
         {
             var position = rails.GetPosition(_currentSpeed * Time.fixedDeltaTime);
             var rotate = rails.GetRotationOnCurrentRange();
-                
+            
+            _leniarVeloty = (position - _lastPosition) / Time.fixedDeltaTime;
+            _lastPosition = position;
+            
             trainRb.MovePosition(position);
             trainRb.MoveRotation(rotate);
 
@@ -86,6 +93,13 @@ namespace _Train.Scripts.Train
             {
                 _currentSpeed = Mathf.MoveTowards(_currentSpeed, currentMotorSpeed, speedBraking * Time.fixedDeltaTime);
             }
+        }
+
+        public void FUpdate()
+        {
+            UpdateSpeed();
+            MoveTrain();
+            UpdateDebug();
         }
     }
 }

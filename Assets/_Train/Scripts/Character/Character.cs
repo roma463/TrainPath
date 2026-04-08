@@ -150,6 +150,7 @@ namespace _Train.Scripts.Character
             }
             
             velocity += Collision.LinearVelocity;
+            // Debug.Log("Character FixedUpdate");
             
             if (applyGravity)
             {
