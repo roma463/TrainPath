@@ -84,6 +84,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Train.Scripts.Train.TrainFuel
   maximumFuel: 10000
   onePercent: 1
+  startFuel: 0
   motor: {fileID: 8284439019999268913}
 --- !u!1 &964438903320815210
 GameObject:
@@ -481,6 +482,8 @@ MonoBehaviour:
   fuelConsumption: 15
   trainFuel: {fileID: 8046229469362793370}
   viewSpeed: {fileID: 7953598397632556480}
+  electroPower: {fileID: 7251757960861231133}
+  fillPowerSpeed: 0.01
 --- !u!114 &7681662112067340367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2244,6 +2247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Train.Scripts.Train.TrainFuel
   maximumFuel: 10000
   onePercent: 1
+  startFuel: 5000
   motor: {fileID: 7294711456055283743}
 --- !u!1 &3892736449414849847
 GameObject:

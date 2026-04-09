@@ -11,15 +11,17 @@ namespace _Train.Scripts.Train
         {
             slider.SetValue(1);
             
-            trainFuel.OnSpend += OnChangeFuel;
+            trainFuel.OnSpend += ChangeFuel;
+            trainFuel.OnFill += ChangeFuel;
         }
 
         private void OnDestroy()
         {
-            trainFuel.OnSpend -= OnChangeFuel;
+            trainFuel.OnSpend -= ChangeFuel;
+            trainFuel.OnFill -= ChangeFuel;
         }
 
-        private void OnChangeFuel(float value)
+        private void ChangeFuel(float value)
         {
             slider.SetValue(value / trainFuel.MaximumFuel);
         }

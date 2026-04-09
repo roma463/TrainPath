@@ -61,7 +61,8 @@ namespace _Train.Scripts.Train.Motors
 
         public void ActivateMotor()
         {
-            IsActive = true;
+            if (CanUpdateMotor())
+                IsActive = true;
         }
 
         public void DeactivateMotor()
