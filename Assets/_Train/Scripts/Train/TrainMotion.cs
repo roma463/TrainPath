@@ -1,4 +1,5 @@
 using System;
+using _Train.Scripts.Train.Motors;
 using _Train.Scripts.Root;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,8 @@ namespace _Train.Scripts.Train
         [SerializeField] private float braking = 14f;
         [SerializeField] private Rigidbody trainRb;
         [SerializeField] private float maxSpeed = 10f;
-        [SerializeField] private TrainMotor motor;
+        [SerializeField] private ElectroMotor electroMotor;
+        [SerializeField] private FuelMotor fuelMotor;
         [SerializeField] private float speedBraking;
         
         [SerializeField, Range(0f, 1f)] private float range;
@@ -20,6 +22,7 @@ namespace _Train.Scripts.Train
         [Header("Debug")]
         [SerializeField] private TMP_Text viewSpeed;
         
+    
         private Quaternion previousRotation;
         private float _currentSpeed;
         
@@ -49,25 +52,20 @@ namespace _Train.Scripts.Train
         }
         public void SetTargetPower(float speed)
         {
-            motor.SetTargetPower(speed);
-        }
-        
-        private void FixedUpdate()
-        {
-
+            electroMotor.SetTargetPower(speed);
+            fuelMotor.SetTargetPower(speed);
         }
 
         private void UpdateDebug()
         {
             viewSpeed.text = $"current speed: <color=yellow>{(float)Math.Round(_currentSpeed, 1)}</color>";
-            // Debug.Log("Train FixedUpdate");
         }
         
         private void MoveTrain()
         {
             var position = rails.GetPosition(_currentSpeed * Time.fixedDeltaTime);
             var rotate = rails.GetRotationOnCurrentRange();
-            
+                
             _leniarVeloty = (position - _lastPosition) / Time.fixedDeltaTime;
             _lastPosition = position;
             
@@ -80,18 +78,19 @@ namespace _Train.Scripts.Train
 
         private void UpdateSpeed()
         {
-            var currentMotorSpeed = motor.NormalPower * maxSpeed; 
+            var normalPower = electroMotor.NormalPower / 0.3f + fuelMotor.NormalPower * 0.7f;
+            var currentMotorsSpeed = normalPower * maxSpeed;
             
-            if(Mathf.Approximately(_currentSpeed, currentMotorSpeed))
+            if(Mathf.Approximately(_currentSpeed, currentMotorsSpeed))
                 return;
             
-            if (_currentSpeed < currentMotorSpeed)
+            if (_currentSpeed < currentMotorsSpeed)
             {
-                _currentSpeed = currentMotorSpeed;
+                _currentSpeed = currentMotorsSpeed;
             }
             else
             {
-                _currentSpeed = Mathf.MoveTowards(_currentSpeed, currentMotorSpeed, speedBraking * Time.fixedDeltaTime);
+                _currentSpeed = Mathf.MoveTowards(_currentSpeed, currentMotorsSpeed, speedBraking * Time.fixedDeltaTime);
             }
         }
 
