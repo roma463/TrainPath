@@ -39,6 +39,7 @@ public class INPUTE
     public Vector2 MouseDelta => GameIsPaused() ? Vector2.zero : _inputActions.Player.Look.ReadValue<Vector2>();
     public bool IsMovementPerformed { get; private set; }
     public bool IsRunning { get; private set; }
+    public Vector2 ScrollLock => _inputActions.Player.Scroll.ReadValue<Vector2>();
 
     public void Enable()
     {

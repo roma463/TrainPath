@@ -16,6 +16,7 @@ namespace _Train.Scripts.Character
         private INPUTE _input;
         
         private IInteractable _currentInteractable;
+        private IHoverable _currentHoverable;
         private INotifyStateChanged _currentNotifyStateChangedObject;
 
         private void Start()
@@ -54,6 +55,11 @@ namespace _Train.Scripts.Character
                     _input.OnPerformedGrab += OnPerformedGrabButton;
                 }
             }
+            else if (detectedObject.TryGetComponent(out IHoverable hoverable))
+            {
+                _currentHoverable = hoverable;
+                _currentHoverable.OnHoverEnter();
+            }
         }
 
         private void OnChangeCurrentObject()
@@ -63,17 +69,26 @@ namespace _Train.Scripts.Character
 
         private void OnInteractionStopped()
         {
-            _currentInteractable = null;
-            
-            InteractableView.Instance.Hide();
 
-            if (_currentNotifyStateChangedObject != null)
+            if (_currentInteractable != null)
             {
-                _currentNotifyStateChangedObject.OnChange -= OnChangeCurrentObject;
-                _currentNotifyStateChangedObject = null;
+                InteractableView.Instance.Hide();
+
+                if (_currentNotifyStateChangedObject != null)
+                {
+                    _currentNotifyStateChangedObject.OnChange -= OnChangeCurrentObject;
+                    _currentNotifyStateChangedObject = null;
+                }
+                
+                _currentInteractable = null;
+                _input.OnPerformedGrab -= OnPerformedGrabButton;
             }
-            
-            _input.OnPerformedGrab -= OnPerformedGrabButton;
+
+            if (_currentHoverable != null)
+            {
+                _currentHoverable.OnHoverExit();
+                _currentHoverable = null;
+            }
         }
         
         private void OnPerformedGrabButton()

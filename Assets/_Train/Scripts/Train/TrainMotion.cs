@@ -1,6 +1,7 @@
 using System;
 using _Train.Scripts.Train.Motors;
 using _Train.Scripts.Root;
+using _Train.Scripts.Train.Buttons;
 using TMPro;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace _Train.Scripts.Train
         [SerializeField] private ElectroMotor electroMotor;
         [SerializeField] private FuelMotor fuelMotor;
         [SerializeField] private float speedBraking;
+        [SerializeField] private Lever powerFuelMotor;
         
         [SerializeField, Range(0f, 1f)] private float range;
         
@@ -48,8 +50,20 @@ namespace _Train.Scripts.Train
             
             transform.position = startPosition;
             previousRotation = transform.rotation;
-            
+            powerFuelMotor.OnChange += SetPowerByPercent;
         }
+
+        private void OnDestroy()
+        {
+            powerFuelMotor.OnChange -= SetPowerByPercent;
+        }
+
+        private void SetPowerByPercent(float percent)
+        {
+            electroMotor.SetTargetPower(percent * 100);
+            fuelMotor.SetTargetPower(percent * 100);
+        }
+        
         public void SetTargetPower(float speed)
         {
             electroMotor.SetTargetPower(speed);
