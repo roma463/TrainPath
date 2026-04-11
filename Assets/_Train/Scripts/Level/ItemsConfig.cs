@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 #if UNITY_EDITOR
 using EditorUtility = UnityEditor.EditorUtility;
@@ -59,6 +60,18 @@ namespace _Train.Scripts.Level.Items.Data
             
             EditorUtility.SetDirty(this);
         }
+
+        [ContextMenu("SetId")]
+        private void SetIId()
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                // PrefabUtility.ApplyMo(items[i].Prefab);
+                items[i].Prefab.SetIndex(i);
+                // PrefabUtility.ApplyPrefabInstance(items[i].Prefab.gameObject, InteractionMode.AutomatedAction);
+
+            }
+        }
 #endif
 
         public ItemData GetItemDataByPrefab(LevelItem obj)
@@ -95,7 +108,7 @@ namespace _Train.Scripts.Level.Items.Data
         public float Price;
         public float Mass;
         public LevelItem Prefab;
-        public Vector3 grabRotate;
         public Vector3 positionOffset;
+        public Vector3 grabRotate;
     }
 }

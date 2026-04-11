@@ -56,4 +56,4 @@ MonoBehaviour:
   <MaxDropTime>k__BackingField: 1
   <MinTimeForDropWithForce>k__BackingField: 0.1
   <MaxTimeForDropWithForce>k__BackingField: 1
-  <MaxDropForce>k__BackingField: 350
+  <MaxDropForce>k__BackingField: 15

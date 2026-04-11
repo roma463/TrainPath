@@ -92,7 +92,7 @@ namespace _Train.Scripts.Train
 
         private void UpdateSpeed()
         {
-            var normalPower = electroMotor.NormalPower / 0.3f + fuelMotor.NormalPower * 0.7f;
+            var normalPower = electroMotor.NormalPower * 0.3f + fuelMotor.NormalPower * 0.7f;
             var currentMotorsSpeed = normalPower * maxSpeed;
             
             if(Mathf.Approximately(_currentSpeed, currentMotorsSpeed))

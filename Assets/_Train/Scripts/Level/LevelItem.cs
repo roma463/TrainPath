@@ -2,37 +2,29 @@ using System;
 using _Train.Scripts.Root;
 using Mirror;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace _Train.Scripts.Level.Items.Data
 {
-    public class LevelItem : NetworkBehaviour
+    public class LevelItem : MonoBehaviour
     {
-        public event Action OnSetup;
         public ItemData ItemData { get; private set; }
+        public bool IsLoaded { get; private set; }
         
-        [SyncVar(hook = nameof(OnChangeIndexData))]
-        private int _idItemData;
+        [SerializeField] private int id = -1;
 
-        public override void OnStartClient()
+        public void SetIndex(int index)
         {
-            if (ItemData == null)
+            id = index;
+        }
+        
+        public void Start()
+        {
+            if (ItemData == null && id != -1)
             {
-                ItemData = GameEntryPoint.Instance.ItemsConfig.GetItemDataByIndex(_idItemData);
+                ItemData = GameEntryPoint.Instance.ItemsConfig.GetItemDataByIndex(id);
+                IsLoaded = true;
             }
-        }
-        
-        [Server]
-        public void Setup(ItemData itemData)
-        {
-            ItemData = itemData;
-            _idItemData = GameEntryPoint.Instance.ItemsConfig.GetIndexByItemData(itemData);
-            OnSetup?.Invoke();
-        }
-
-        private void OnChangeIndexData(int oldId, int newId)
-        {
-            ItemData = GameEntryPoint.Instance.ItemsConfig.GetItemDataByIndex(newId);
-            OnSetup?.Invoke();
         }
     }
 }

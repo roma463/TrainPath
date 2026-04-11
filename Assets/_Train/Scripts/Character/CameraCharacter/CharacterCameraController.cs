@@ -94,7 +94,7 @@ namespace _Train.Scripts.Character.CameraCharacter
             if (cameraLocked)
                 return;
             
-            Vector2 look = (LookDirection * mouseSensitivity) * Time.deltaTime;
+            Vector2 look = (LookDirection * mouseSensitivity);
             
             _xRotation -= look.y;
             _xRotation = Mathf.Clamp(_xRotation, -maxLookAngle, maxLookAngle);

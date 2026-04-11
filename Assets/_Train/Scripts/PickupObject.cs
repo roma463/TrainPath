@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using _Train.Scripts.Character;
 using _Train.Scripts.Level.Items.Data;
 using _Train.Scripts.Root;
-using Mirror;
 using UnityEngine;
 
 namespace _Train.Scripts
@@ -47,31 +44,13 @@ namespace _Train.Scripts
             return true;
         }
 
-        private void CmdGrab()
-        {
-            RpcGrab();
-            
-            CmdGrabBefore();
-        }
-
         public void RemoveVelocity()
         {
             rigidBody.linearVelocity = Vector3.zero;
             rigidBody.angularVelocity = Vector3.zero;
         }
 
-        protected virtual void CmdGrabBefore()
-        {
-            
-        }
-
-        private void RpcGrab()
-        {
-            collider.enabled = false;
-            RpcAfterGrab();
-        }
-
-        protected virtual void RpcAfterGrab()
+        protected virtual void AfterGrab()
         {
             
         }
@@ -83,16 +62,21 @@ namespace _Train.Scripts
 
         public void Grab(Character.Character character)
         {
-            rigidBody.isKinematic = true;
-            collider.enabled = true;
             RemoveVelocity();
+            rigidBody.interpolation = RigidbodyInterpolation.None;
+            rigidBody.isKinematic = true;
+            collider.enabled = false;
+            AfterGrab();
 
         }
 
         public void Drop()
         {
+            rigidBody.interpolation = RigidbodyInterpolation.Interpolate;
             rigidBody.isKinematic = false;
-            collider.enabled = false;
+            collider.enabled = true;
+            RemoveVelocity();
+            AfterDrop();
         }
 
         public void Throw(Vector3 direction, float force)
@@ -108,26 +92,8 @@ namespace _Train.Scripts
                 obj.layer = LayerMask.NameToLayer(newLayer);
             }
         }
-
-        private void CmdDrop()
-        {
-            
-            RpcDrop();
-            
-            CmdAfterDrop();
-        }
-
-        protected virtual void CmdAfterDrop()
-        {
-            
-        }
-
-        private void RpcDrop()
-        {
-            RpcAfterDrop();
-        }
         
-        protected virtual void RpcAfterDrop()
+        protected virtual void AfterDrop()
         {
             
         }

@@ -25,10 +25,10 @@ namespace _Train.Scripts.UI
             elements.SetActive(showOnStart);
         }
 
-        public void Setup(float timeForStart, float time, bool withComplete)
+        public void Setup(float timeForStart, float time, bool withComplete, Action retation = null)
         {
             _withComplete = withComplete;
-            _coroutine = StartCoroutine(Animation(timeForStart, time));
+            _coroutine = StartCoroutine(Animation(timeForStart, time, retation));
         }
 
         private void OnDestroy()
@@ -45,13 +45,14 @@ namespace _Train.Scripts.UI
             Hide();
         }
 
-        private IEnumerator Animation(float timeForStart, float time)
+        private IEnumerator Animation(float timeForStart, float time, Action retantion = null)
         {
             yield return new WaitForSeconds(timeForStart);
             
             Show();
             StartRetantion = true;
             OnStartRetention?.Invoke();
+            retantion?.Invoke();
             float currentTime = 0;
             
             while (time >= currentTime)
