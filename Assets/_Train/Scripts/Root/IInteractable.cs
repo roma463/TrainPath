@@ -1,15 +1,15 @@
+using _Train.Scripts.Character;
 using UnityEngine;
 
 namespace _Train.Scripts.Root
 {
     public interface IInteractable
     {
-        public Transform RootTransform { get; }
 
-        public string GetPromt(Character.Character character);
+        public string GetPromt(CharacterContext character);
 
-        public bool CanInteract(Character.Character character);
+        public bool CanInteract(CharacterContext character);
 
-        public void Interact(Character.Character character);
+        public void Interact(CharacterContext character);
     }
 }

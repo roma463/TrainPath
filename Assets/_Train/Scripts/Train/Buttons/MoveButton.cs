@@ -1,4 +1,5 @@
 using System;
+using _Train.Scripts.Character;
 using _Train.Scripts.Root;
 using UnityEngine;
 
@@ -21,17 +22,17 @@ namespace _Train.Scripts.Train.Buttons
                 GetComponentInParent<TrainMotion>();
         }
 
-        public string GetPromt(Character.Character character)
+        public string GetPromt(CharacterContext character)
         {
             return isMoving? "Stop" : "Start";   
         }
 
-        public bool CanInteract(Character.Character character)
+        public bool CanInteract(CharacterContext character)
         {
             return true;
         }
 
-        public void Interact(Character.Character character)
+        public void Interact(CharacterContext character)
         {
             isMoving = !isMoving;
         

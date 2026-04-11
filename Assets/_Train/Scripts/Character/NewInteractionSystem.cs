@@ -8,7 +8,7 @@ namespace _Train.Scripts.Character
 {
     public class NewInteractionSystem : MonoBehaviour
     {
-        [SerializeField] private Character character;
+        [SerializeField] private CharacterContext character;
         [SerializeField] private float interactDistance = 5f;
         [SerializeField] private LayerMask interactableLayer;
         [SerializeField] private InteractionSystem interactionSystem;

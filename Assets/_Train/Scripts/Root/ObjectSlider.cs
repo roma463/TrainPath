@@ -17,7 +17,7 @@ public class ObjectSlider : MonoBehaviour
 
     public void Setup(float min, float max)
     {
-        this.min = min;
+        this.min =  Mathf.Clamp(min, this.min, max);
         this.max = max;
     }
     

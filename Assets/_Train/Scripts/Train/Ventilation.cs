@@ -1,4 +1,5 @@
 ﻿using System;
+using _Train.Scripts.Character;
 using _Train.Scripts.Root;
 using _Train.Scripts.Train.Root;
 using UnityEngine;
@@ -30,17 +31,17 @@ namespace _Train.Scripts.Train
             return _isOpen ? spendTemperature : 0f;
         }
 
-        public string GetPromt(Character.Character character)
+        public string GetPromt(CharacterContext character)
         {
             return _isOpen ? "Закрыть" : "Открыть";
         }
 
-        public bool CanInteract(Character.Character character)
+        public bool CanInteract(CharacterContext character)
         {
             return true;
         }
 
-        public void Interact(Character.Character character)
+        public void Interact(CharacterContext character)
         {
             _isOpen = !_isOpen;
             view.localRotation = _isOpen ? _openRotation : _closeRotation;

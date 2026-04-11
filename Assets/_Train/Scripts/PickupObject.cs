@@ -13,6 +13,7 @@ namespace _Train.Scripts
         [SerializeField] private LevelItem levelItem;
         
         [SerializeField] private List<GameObject> layerChangeableObjects = new List<GameObject>();
+        [SerializeField] private List<Collider> disableGrabColliders = new List<Collider>();
 
         public Rigidbody Rigidbody => rigidBody;
         public virtual string GrabAnimName => "Take";
@@ -63,6 +64,12 @@ namespace _Train.Scripts
         public void Grab(Character.Character character)
         {
             RemoveVelocity();
+
+            foreach (var component in disableGrabColliders)
+            {
+                component.enabled = false;
+            }
+            
             rigidBody.interpolation = RigidbodyInterpolation.None;
             rigidBody.isKinematic = true;
             collider.enabled = false;
@@ -72,6 +79,11 @@ namespace _Train.Scripts
 
         public void Drop()
         {
+            foreach (var component in disableGrabColliders)
+            {
+                component.enabled = true;
+            }
+            
             rigidBody.interpolation = RigidbodyInterpolation.Interpolate;
             rigidBody.isKinematic = false;
             collider.enabled = true;

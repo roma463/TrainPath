@@ -19,9 +19,9 @@ MonoBehaviour:
     MaxHealth: 0
     Price: 0
     Mass: 0
-    Prefab: {fileID: 3897381244013224282, guid: bb5f197aa03a1e1478253f014b445b2b, type: 3}
+    Prefab: {fileID: 6654269439101895176, guid: bb5f197aa03a1e1478253f014b445b2b, type: 3}
     positionOffset: {x: 0, y: 0, z: 0}
-    grabRotate: {x: -90, y: -90, z: 0}
+    grabRotate: {x: 0, y: -90, z: 0}
   loadPrefabs: []
   loadSprites: []
   defaultSprite: {fileID: 0}

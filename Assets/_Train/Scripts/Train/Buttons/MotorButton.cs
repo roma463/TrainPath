@@ -1,4 +1,5 @@
 ﻿using System;
+using _Train.Scripts.Character;
 using _Train.Scripts.Root;
 using _Train.Scripts.Train.Motors;
 using UnityEngine;
@@ -15,17 +16,17 @@ namespace _Train.Scripts.Train.Buttons
     
         public Transform RootTransform => transform;
 
-        public string GetPromt(Character.Character character)
+        public string GetPromt(CharacterContext character)
         {
             return isActive? "Stop" : "Start";
         }
 
-        public bool CanInteract(Character.Character character)
+        public bool CanInteract(CharacterContext character)
         {
             return true;
         }
 
-        public void Interact(Character.Character character)
+        public void Interact(CharacterContext character)
         {
             if (isActive)
                 motor.DeactivateMotor();

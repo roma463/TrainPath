@@ -1126,7 +1126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f8492e58ad4f3ea376883f9dc0f7fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 4333362079066110298}
+  character: {fileID: 8737586534120517008}
   interactDistance: 2
   interactableLayer:
     serializedVersion: 2
