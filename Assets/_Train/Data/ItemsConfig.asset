@@ -22,6 +22,15 @@ MonoBehaviour:
     Prefab: {fileID: 6654269439101895176, guid: bb5f197aa03a1e1478253f014b445b2b, type: 3}
     positionOffset: {x: 0, y: 0, z: 0}
     grabRotate: {x: 0, y: -90, z: 0}
+  - Icon: {fileID: 0}
+    Name: Key
+    IsDamageble: 0
+    MaxHealth: 0
+    Price: 0
+    Mass: 0
+    Prefab: {fileID: 6292588521644529163, guid: 6f735f22c810e4e4d896ba61041fdf9d, type: 3}
+    positionOffset: {x: 0, y: 0.1, z: 0.1}
+    grabRotate: {x: -30, y: 0, z: 60}
   loadPrefabs: []
   loadSprites: []
   defaultSprite: {fileID: 0}
