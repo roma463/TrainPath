@@ -48,6 +48,7 @@ MonoBehaviour:
   interactableObject: {fileID: 5824689622187939864}
   door: {fileID: 6050699394859803945}
   openAngle: {x: 0, y: 90, z: 0}
+  speedAnimation: 50
   open: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C"
   closed: "\u0417\u0430\u043A\u0440\u044B\u0442\u044C"
 --- !u!1 &4435413059881867667
