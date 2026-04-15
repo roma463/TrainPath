@@ -19,7 +19,7 @@ namespace _Train.Scripts.Train.Motors
         [SerializeField] private TMP_Text viewSpeed;
 
         private float _targetPower;
-        private float _currentMaxPower = MAX_POWER;
+        private float _targetPowerClamped;
         
         private const float MAX_POWER = 100f;
         
@@ -29,9 +29,30 @@ namespace _Train.Scripts.Train.Motors
         
         public void SetTargetPower(float power)
         {
-            _targetPower = Mathf.Clamp(power, 0, _currentMaxPower);
+            _targetPower = power;
+            UpdateClampedPower();
         }
 
+        public void UpdateClampedPower()
+        {
+            _targetPowerClamped = Mathf.Clamp(_targetPower, 0, GetCurrentMaxPower());
+        }
+
+        public virtual float GetCurrentMaxPower()
+        {
+            return MAX_POWER;
+        }
+
+        public void Stop()
+        {
+            IsActive = false;
+            CurrentPower = 0f;
+            _targetPower = 0f;
+            _targetPowerClamped = 0f;
+            
+            OnStop?.Invoke();
+        }
+        
         private void FixedUpdate()
         { 
             if (IsActive)
@@ -43,9 +64,9 @@ namespace _Train.Scripts.Train.Motors
                 else
                 {
                     trainFuel.Spend(NormalPower * fuelConsumption * Time.fixedDeltaTime);
-                    if (!Mathf.Approximately(CurrentPower, _targetPower))
+                    if (!Mathf.Approximately(CurrentPower, _targetPowerClamped))
                     {
-                        CurrentPower = Mathf.MoveTowards(CurrentPower, _targetPower, speedChange * Time.fixedDeltaTime);
+                        CurrentPower = Mathf.MoveTowards(CurrentPower, _targetPowerClamped, speedChange * Time.fixedDeltaTime);
                     }
                 }
                 

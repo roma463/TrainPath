@@ -58,6 +58,13 @@ namespace _Train.Scripts.Train
             powerFuelMotor.OnChange -= SetPowerByPercent;
         }
 
+        public void Stop()
+        {
+            _currentSpeed = 0;
+            electroMotor.Stop();
+            fuelMotor.Stop();
+        }
+
         private void SetPowerByPercent(float percent)
         {
             electroMotor.SetTargetPower(percent * 100);

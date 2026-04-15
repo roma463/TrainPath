@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5426778406755408660}
   - component: {fileID: 6292588521644529163}
   - component: {fileID: 4539396607349156422}
-  - component: {fileID: 3918907949223916364}
+  - component: {fileID: 5283702398303817330}
   m_Layer: 6
   m_Name: Key
   m_TagString: Untagged
@@ -94,10 +94,10 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3918907949223916364
+--- !u!114 &5283702398303817330
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,9 +106,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5106738877687654167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c49155cc9c9b6e43863d54a4e3de01e, type: 3}
+  m_Script: {fileID: 11500000, guid: f93d8f4580bb3a74a8504f43c4092f90, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Train.Scripts.PickupObject
+  m_EditorClassIdentifier: Assembly-CSharp::_Train.Scripts.Key
   rigidBody: {fileID: 4539396607349156422}
   collider: {fileID: 5426778406755408660}
   levelItem: {fileID: 6292588521644529163}
