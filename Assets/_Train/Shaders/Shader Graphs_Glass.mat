@@ -56,11 +56,11 @@ Material:
     - _NoiseTransperant: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 2
+    - _Scale: 86.07
     - _TwoNoiseScale: 0.1
     - _pixel: 200
     m_Colors:
-    - _NoiseColor: {r: 0.6132076, g: 0.33547747, b: 0.16487184, a: 1}
+    - _NoiseColor: {r: 0.49056602, g: 0.4067346, b: 0.35404056, a: 1}
     - _OutlineColor: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

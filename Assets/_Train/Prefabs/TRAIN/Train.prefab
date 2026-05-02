@@ -388,7 +388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8418283391201015002
 Transform:
   m_ObjectHideFlags: 0
@@ -1249,8 +1249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Train.Scripts.Train.Motors.FuelMotor
   speedChange: 5
-  speedSpendPowerByDisable: 2
-  fuelConsumption: 15
+  speedSpendPowerByDisable: 15
+  fuelConsumption: 50
   trainFuel: {fileID: 8046229469362793370}
   viewSpeed: {fileID: 7953598397632556480}
   electroPower: {fileID: 7251757960861231133}
@@ -1277,20 +1277,55 @@ MonoBehaviour:
   trainMotor: {fileID: 7294711456055283743}
   heatingCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   coolingCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.49645966
+      inSlope: 1.0489019
+      outSlope: 1.0489019
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.16685349
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxTemperature: 100
-  minTemperature: 0
   ambientTemperature: 40
-  thermalInertia: 10
+  thermalInertia: 1
   spendTemperatureObjects:
   - {fileID: 8267738870386631810}
   - {fileID: 1904795365114722926}
@@ -7135,7 +7170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Train.Scripts.Train.Motors.ElectroMotor
   speedChange: 4
-  speedSpendPowerByDisable: 2
+  speedSpendPowerByDisable: 10
   fuelConsumption: 15
   trainFuel: {fileID: 7251757960861231133}
   viewSpeed: {fileID: 8947133877535355872}
@@ -7165,7 +7200,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxTemperature: 100
-  minTemperature: 0
   ambientTemperature: 40
   thermalInertia: 10
   spendTemperatureObjects:
@@ -9994,7 +10028,7 @@ MonoBehaviour:
   acceleration: 8
   braking: 14
   trainRb: {fileID: 2559725316457395916}
-  maxSpeed: 10
+  maxSpeed: 40
   electroMotor: {fileID: 8284439019999268913}
   fuelMotor: {fileID: 7294711456055283743}
   speedBraking: 4

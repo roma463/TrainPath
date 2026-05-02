@@ -1,5 +1,6 @@
 using System;
 using _Train.Scripts.Character;
+using _Train.Scripts.Root;
 using _Train.Scripts.Train.Motors;
 using _Train.Scripts.Train.Root;
 using TMPro;
@@ -57,6 +58,11 @@ namespace _Train.Scripts.Train
         public bool CanInteract(CharacterContext character)
         {
             return character.GrabSystem.CurrentGrabObject != null && character.GrabSystem.CurrentGrabObject is Key;
+        }
+
+        public bool CanInteractWithTool(Tool tool)
+        {
+            return true;
         }
 
         public void Interact(CharacterContext character)

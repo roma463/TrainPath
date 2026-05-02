@@ -224,7 +224,7 @@ MonoBehaviour:
   disableGrabColliders:
   - {fileID: 2937040536329006763}
   slider: {fileID: 1573700835649091526}
-  fuelAmount: 100
+  fuelAmount: 1000
 --- !u!114 &6654269439101895176
 MonoBehaviour:
   m_ObjectHideFlags: 0

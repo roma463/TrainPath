@@ -33,6 +33,11 @@ namespace _Train.Scripts.Root
             return _canInteract;
         }
 
+        public bool CanInteractWithTool(Tool tool)
+        {
+            return false;
+        }
+
         public void Interact(CharacterContext character)
         {
             OnInteracting?.Invoke();

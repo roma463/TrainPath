@@ -18,23 +18,27 @@ namespace _Train.Scripts.Character
         private IInteractable _currentInteractable;
         private IHoverable _currentHoverable;
         private INotifyStateChanged _currentNotifyStateChangedObject;
+        private Tool _currentTool;
 
         private void Start()
         {
             _input = INPUTE.instance;
             interactionSystem.OnInteractionStart += OnInteractionStarted;
             interactionSystem.OnInteractionStop += OnInteractionStopped;
+            _input.OnPerformedGrab += OnPerformedGrabButton;
+            character.GrabSystem.OnItemGrabbed += OnGrabbedItem;
+            _input.OnLeftMouseButtonPerformed += TryStartUseTool;
+            _input.OnLeftMouseButtonCanceled += TryStopUseTool;
         }
 
         private void OnDestroy()
         {
             interactionSystem.OnInteractionStart -= OnInteractionStarted;
             interactionSystem.OnInteractionStop -= OnInteractionStopped;
-
-            if (_currentInteractable!= null)
-            {
-                _input.OnPerformedGrab -= OnPerformedGrabButton;
-            }
+            _input.OnPerformedGrab -= OnPerformedGrabButton;
+            character.GrabSystem.OnItemGrabbed -= OnGrabbedItem;
+            _input.OnLeftMouseButtonPerformed -= TryStartUseTool;
+            _input.OnLeftMouseButtonCanceled -= TryStopUseTool;
         }
 
         private void OnInteractionStarted(GameObject detectedObject)
@@ -52,7 +56,6 @@ namespace _Train.Scripts.Character
                 if (interactable.CanInteract(character))
                 {
                     _currentInteractable = interactable; 
-                    _input.OnPerformedGrab += OnPerformedGrabButton;
                 }
             }
             else if (detectedObject.TryGetComponent(out IHoverable hoverable))
@@ -69,7 +72,6 @@ namespace _Train.Scripts.Character
 
         private void OnInteractionStopped()
         {
-
             if (_currentInteractable != null)
             {
                 InteractableView.Instance.Hide();
@@ -81,7 +83,6 @@ namespace _Train.Scripts.Character
                 }
                 
                 _currentInteractable = null;
-                _input.OnPerformedGrab -= OnPerformedGrabButton;
             }
 
             if (_currentHoverable != null)
@@ -93,8 +94,33 @@ namespace _Train.Scripts.Character
         
         private void OnPerformedGrabButton()
         {
-            if (_currentInteractable.CanInteract(character))
+            if (_currentInteractable != null && _currentInteractable.CanInteract(character))
                 _currentInteractable.Interact(character);
+        }
+        
+        private void OnGrabbedItem(PickupObject pickupObject)
+        {
+            if (pickupObject.gameObject.TryGetComponent(out Tool tool))
+            {
+                _currentTool = tool;
+            }
+        }
+
+        private void TryStartUseTool()
+        {
+            if (_currentTool == null || _currentInteractable == null)
+                return;
+
+            if (_currentTool.CanUse(_currentInteractable))
+            {
+                
+            }
+        }
+
+        private void TryStopUseTool()
+        {
+            if (_currentTool == null)
+                return;
         }
     }
 }

@@ -17,7 +17,8 @@ namespace _Train.Scripts.Character
         [field: SerializeField] public Material DefaultMaterial { get; private set; }
         [field: SerializeField] public Material DeathMaterial { get; private set; }
         [field: SerializeField] public GrabSystem GrabSystem { get; private set; }
-
+        
+        public static CharacterContext Instance { get; private set; }
         public INPUTE InputHandler => INPUTE.instance;
         public float StartHeightCharacter { get; private set; }
         public float StartVectivalOffsetCharacterCollider { get; private set; }
@@ -27,6 +28,7 @@ namespace _Train.Scripts.Character
     
         public void Init()
         {
+            Instance = this;
             StartHeightCharacter = Character.CharacterCollider.height;
             StartVectivalOffsetCharacterCollider = Character.CharacterCollider.center.y;
         }

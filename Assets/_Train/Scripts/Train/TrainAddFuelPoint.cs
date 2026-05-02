@@ -20,15 +20,18 @@ namespace _Train.Scripts.Train
             return character.GrabSystem.CurrentGrabObject is CanisterFuel;
         }
 
+        public bool CanInteractWithTool(Tool tool)
+        {
+            return tool is CanisterFuel;
+        }
+
         public void Interact(CharacterContext character)
         {
-            var canister = character.GrabSystem.CurrentGrabObject as CanisterFuel;
-
-            if (canister != null)
-            {
-                fuel.Fill(canister.FuelAmount);
-                canister.GetAmount(canister.FuelAmount);
-            }
+            // if (canister != null)
+            // {
+                // fuel.Fill(canister.FuelAmount);
+                // canister.GetAmount(canister.FuelAmount);
+            // }
         }
     }
 }

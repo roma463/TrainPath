@@ -41,6 +41,11 @@ namespace _Train.Scripts.Train
             return true;
         }
 
+        public bool CanInteractWithTool(Tool tool)
+        {
+            return true;
+        }
+
         public void Interact(CharacterContext character)
         {
             _isOpen = !_isOpen;

@@ -11,10 +11,8 @@ namespace _Train.Scripts.Train
         [SerializeField] private AnimationCurve heatingCurve; // Кривая нагрева в зависимости от нагрузки
         [SerializeField] private AnimationCurve coolingCurve; // Кривая охлаждения в зависимости от температуры
         [SerializeField] private float maxTemperature = 100f;
-        [SerializeField] private float minTemperature = 0f;
         [SerializeField] private float ambientTemperature = 20f; // Температура окружающей среды
-
-        [SerializeField] private float thermalInertia = 10f; // Тепловая инерция (чем выше, тем медленнее меняется температура)
+        [SerializeField] private float thermalInertia = 3f; // Тепловая инерция (чем выше, тем медленнее)
 
         [SerializeField] private GameObject[] spendTemperatureObjects;
 
@@ -53,7 +51,7 @@ namespace _Train.Scripts.Train
             _currentTemperature += netHeatFlow * Time.fixedDeltaTime;
 
             // Ограничиваем температуру
-            _currentTemperature = Mathf.Clamp(_currentTemperature, ambientTemperature - 10f, maxTemperature);
+            _currentTemperature = Mathf.Clamp(_currentTemperature, ambientTemperature, maxTemperature);
 
             // Вызываем событие
             OnTemperatureChanged?.Invoke(_currentTemperature, NormalizedTemperature);
@@ -64,21 +62,11 @@ namespace _Train.Scripts.Train
 
         private float CalculateHeatingPower()
         {
-            // Базовая мощность нагрева от нагрузки двигателя
+            // Простой нагрев от нагрузки двигателя
             float load = trainMotor.NormalPower;
-            float baseHeating = heatingCurve.Evaluate(load);
-
-            // Дополнительный нагрев от радиаторов/охлаждения (если есть)
-            // float coolingEfficiency = 1f;
-            // foreach (var spendTemp in _spendTemperatures)
-            // {
-            //     coolingEfficiency -= spendTemp.SpendPercent() / 100f;
-            // }
-
-            // Чем выше температура, тем меньше эффективность охлаждения
-            float temperaturePenalty = 1f - Mathf.Clamp01((_currentTemperature - 60f) / 40f) * 0.5f;
-
-            return baseHeating * temperaturePenalty;
+            float heating = heatingCurve.Evaluate(load);
+            
+            return heating;
         }
 
         private float CalculateCoolingPower()
@@ -89,18 +77,20 @@ namespace _Train.Scripts.Train
             if (deltaTemp <= 0)
                 return 0; // Не охлаждаемся, если холоднее окружающей среды
 
-            // Базовая мощность охлаждения зависит от температуры
-            float baseCooling = coolingCurve.Evaluate(NormalizedTemperature);
-
-            // Эффективность системы охлаждения
-            float coolingEfficiency = 1f;
+            // Простое охлаждение зависит только от температуры
+            float cooling = coolingCurve.Evaluate(NormalizedTemperature);
+            
+            // Эффективность системы охлаждения (радиаторы, вентиляторы)
+            float coolingEfficiency = 0f;
             foreach (var spendTemp in _spendTemperatures)
             {
-                coolingEfficiency -= spendTemp.SpendPercent() / 100f;
+                coolingEfficiency += spendTemp.SpendPercent() / 100f;
             }
 
-            // Закон Ньютона-Рихмана: охлаждение пропорционально разнице температур
-            return baseCooling * deltaTemp * coolingEfficiency;
+            if (coolingEfficiency > 0)
+                return cooling * coolingEfficiency;
+            else
+                return cooling;
         }
 
         private void InitializeCurves()
@@ -109,22 +99,22 @@ namespace _Train.Scripts.Train
             if (heatingCurve == null || heatingCurve.keys.Length == 0)
             {
                 heatingCurve = new AnimationCurve();
-                heatingCurve.AddKey(0f, 5f); // Холостой ход - небольшой нагрев
-                heatingCurve.AddKey(0.3f, 15f); // Экономичный режим
-                heatingCurve.AddKey(0.6f, 35f); // Средняя нагрузка
-                heatingCurve.AddKey(0.8f, 50f); // Высокая нагрузка
-                heatingCurve.AddKey(1f, 80f); // Максимальная нагрузка
+                heatingCurve.AddKey(0f, 0f);      // Холостой ход - не греется
+                heatingCurve.AddKey(0.3f, 2f);    // Малая нагрузка
+                heatingCurve.AddKey(0.6f, 6f);    // Средняя нагрузка
+                heatingCurve.AddKey(0.8f, 10f);   // Высокая нагрузка
+                heatingCurve.AddKey(1f, 15f);     // Полная мощность
             }
 
-            // Кривая охлаждения: коэффициент охлаждения в зависимости от температуры
+            // Кривая охлаждения: чем горячее, тем быстрее остывает
             if (coolingCurve == null || coolingCurve.keys.Length == 0)
             {
                 coolingCurve = new AnimationCurve();
-                coolingCurve.AddKey(0f, 2f); // Холодный - слабое охлаждение
-                coolingCurve.AddKey(0.3f, 3f); // Начало работы радиатора
-                coolingCurve.AddKey(0.6f, 5f); // Активное охлаждение
-                coolingCurve.AddKey(0.85f, 8f); // Максимальное охлаждение
-                coolingCurve.AddKey(1f, 12f); // Аварийное охлаждение
+                coolingCurve.AddKey(0f, 0f);      // Холодный - не остывает
+                coolingCurve.AddKey(0.3f, 1f);    // Немного теплый
+                coolingCurve.AddKey(0.6f, 2.5f);  // Горячий
+                coolingCurve.AddKey(0.8f, 4f);    // Очень горячий
+                coolingCurve.AddKey(1f, 5f);      // Критический - быстро остывает
             }
         }
 
@@ -132,55 +122,19 @@ namespace _Train.Scripts.Train
         {
             if (_currentTemperature >= maxTemperature * 0.9f)
             {
-                // Перегрев - штраф к мощности
-                float overheatFactor =
-                    1f - Mathf.Clamp01((_currentTemperature - maxTemperature * 0.9f) / (maxTemperature * 0.1f));
-                // trainMotor.SetPowerMultiplier(overheatFactor);
-
                 if (_currentTemperature >= maxTemperature)
                 {
                     // Критический перегрев
                     Debug.LogWarning("Двигатель перегрет! Требуется охлаждение!");
                 }
             }
-            else
-            {
-                // trainMotor.SetPowerMultiplier(1f);
-            }
         }
 
-        // Ручное охлаждение (например, включение вентиляторов)
+        // Ручное охлаждение (включение вентиляторов)
         public void ActivateEmergencyCooling(float power)
         {
             _currentTemperature -= power * Time.fixedDeltaTime;
             _currentTemperature = Mathf.Clamp(_currentTemperature, ambientTemperature, maxTemperature);
-        }
-
-        // Получение равновесной температуры для заданной нагрузки
-        public float GetEquilibriumTemperature(float load)
-        {
-            float equilibriumTemp = ambientTemperature;
-            float step = 1f;
-
-            // Простой численный метод поиска равновесной температуры
-            for (int i = 0; i < 100; i++)
-            {
-                float heating = heatingCurve.Evaluate(load);
-                float cooling =
-                    coolingCurve.Evaluate(
-                        (equilibriumTemp - ambientTemperature) / (maxTemperature - ambientTemperature));
-                float deltaTemp = equilibriumTemp - ambientTemperature;
-
-                float netFlow = heating - cooling * deltaTemp;
-
-                if (Mathf.Abs(netFlow) < 0.1f)
-                    break;
-
-                equilibriumTemp += netFlow * step;
-                equilibriumTemp = Mathf.Clamp(equilibriumTemp, ambientTemperature, maxTemperature);
-            }
-
-            return equilibriumTemp;
         }
     }
 }

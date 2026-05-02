@@ -32,6 +32,11 @@ namespace _Train.Scripts.Train.Buttons
             return true;
         }
 
+        public bool CanInteractWithTool(Tool tool)
+        {
+            return false;
+        }
+
         public void Interact(CharacterContext character)
         {
             isMoving = !isMoving;

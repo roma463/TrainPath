@@ -1,8 +1,9 @@
 using _Train.Scripts;
+using _Train.Scripts.Root;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CanisterFuel : PickupObject
+public class CanisterFuel : Tool
 {
     [SerializeField] private ObjectSlider slider;
     [SerializeField] private float fuelAmount;
